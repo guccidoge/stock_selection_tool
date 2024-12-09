@@ -69,3 +69,24 @@ def get_historical_closing_prices(ticker: str, period: str):
     
 def validate_ticker (ticker: str) -> bool:
     return ticker.endswith(".KL")
+
+def save_to_csv(data, filename="user_interactions.csv"):
+ 
+    # Convert the data dictionary to a DataFrame
+    df = pd.DataFrame([data])
+    
+    # Check if the file already exists
+    file_exists = os.path.isfile(filename)
+    
+    # Save the data to CSV
+    df.to_csv(filename, mode="a", header=not file_exists, index=False)
+
+def read_from_csv(filename="user_interactions.csv"):
+ 
+    if not os.path.exists(filename):
+        print(f"No data found in {filename}.")
+        return None
+
+    # Read the CSV into a DataFrame
+    df = pd.read_csv(filename)
+    return df
