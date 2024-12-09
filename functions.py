@@ -1,6 +1,9 @@
 import bcrypt
 import pandas as pd
 import os
+import yfinance as yf
+from datetime import datetime, timedelta
+from getpass import getpass
 
 # File to store user data
 credentials_file = "credentials.csv"
@@ -34,3 +37,35 @@ def register():
     df = pd.DataFrame(data)
     df.to_csv(credentials_file, index=False, mode="a", header=not os.path.exists(credentials_file))
     print("Registration successful!")
+
+def login():
+    email = input("Enter your email: ")
+    password = getpass("Enter your password: ")
+
+    if not os.path.exists(credentials_file):
+        print("No registered users found. Please register first.")
+        return False
+
+    df = pd.read_csv(credentials_file)
+    if email in df["Email"].values:
+        stored_hash = df.loc[df["Email"] == email, "Password"].values[0]
+        if verify_password(stored_hash, password):
+            return True
+
+    print("Invalid credentials. Please try again.")
+    return False
+    
+def get_historical_closing_prices(ticker: str, period: str):
+    try:
+        # Fetch data from yfinance
+        stock_data = yf.Ticker(ticker)
+        historical_data = stock_data.history(period=period)
+
+        # Return only closing prices
+        return historical_data['Close']  # 'Close' is case-sensitive
+    except Exception as e:
+        print(f"Error retrieving data: {e}")
+        return None
+    
+def validate_ticker (ticker: str) -> bool:
+    return ticker.endswith(".KL")
