@@ -46,8 +46,10 @@ Upon launching the program, you'll be presented with the following options:
 4. Exit
 5. Go to Stock Ticker Tool
 ```
-Register: If you are new to the tool, choose option 1 to register an account using your email.
-Login: If you already have an account, choose option 2 to log in using your email.
+Register: For new accounts using your email.
+Login: For logging in with your email. 
+Your passwords are hashed using bcrypt so it will appear empty on the terminal. 
+All credentials are saved into credentials.csv
 
 ### Step 2: Stock Ticker Tool
 Once you're logged in, you'll have the option to use the stock selection tool by choosing option 5 (Go to Stock Ticker Tool). Here’s what happens next:
@@ -71,21 +73,22 @@ Type the number corresponding to the desired time period.
 
 View Stock Data: The tool will fetch the historical closing prices for the selected stock ticker over the chosen time period. It will display key statistics such as:
 
-Average Closing Price
-Percentage Change (First to Last Price)
-Highest Closing Price
-Lowest Closing Price
-Save Data: You will be prompted to save the data. If you want to save it, type y and the data will be saved to a CSV file on your local machine.
+- Average Closing Price
+- Percentage Change (First to Last Price)
+- Highest Closing Price
+- Lowest Closing Price
+- Save Data: You will be prompted to save the data. If you want to save it, type y and the data will be saved to a CSV file on your local machine.
 
 The saved data will include the following information:
-Email (for tracking purposes)
-Stock Ticker
-Time Period
-Average Price
-Highest Price
-Lowest Price
-Percentage Change
-The saved data will be stored in a file named saved_data.csv
+- Email (for tracking purposes)
+- Stock Ticker
+- Time Period
+- Average Price
+- Highest Price
+- Lowest Price
+- Percentage Change
+
+The saved data will be stored in a file named user_interactions.csv
 
 ---
 
