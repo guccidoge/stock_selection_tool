@@ -87,4 +87,6 @@ Lowest Price
 Percentage Change
 The saved data will be stored in a file named saved_data.csv
 
-Happy coding! xx eilli
+---
+
+***Happy coding! xx eilli***
