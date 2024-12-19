@@ -17,27 +17,28 @@ def verify_password(stored_hash: str, entered_password: str) -> bool:
     """Verifies the entered password against the stored hash."""
     return bcrypt.checkpw(entered_password.encode(), stored_hash.encode())
 
+def is_valid_email(email: str) -> bool:
+    """Validates the email format to ensure it contains '@' and a domain."""
+    # Regular expression for basic email validation
+    email_regex = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    return re.match(email_regex, email) is not None
+
 def register():
     """Registers a new user with email and hashed password."""
-    email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    email = input("Enter your email: ")
     
-    while True:
-        email = input("Enter your email: ").strip()
-        if not re.match(email_pattern, email):
-            print("Invalid email format. Please enter a valid email address.")
-            continue
-        
-        if os.path.exists(credentials_file):
-            existing_emails = pd.read_csv(credentials_file)["Email"].values
-            if email in existing_emails:
-                print("Email already registered.")
-                return
-        
-        break
+    # Check if the email is valid
+    if not is_valid_email(email):
+        print("Invalid email format. Please make sure the email contains '@' and a valid domain.")
+        return
 
     password = input("Enter your password: ")
     hashed_password = hash_password(password)
-
+    
+    if os.path.exists(credentials_file) and email in pd.read_csv(credentials_file)["Email"].values:
+        print("Email already registered.")
+        return
+    
     pd.DataFrame({"Email": [email], "Password": [hashed_password]}).to_csv(
         credentials_file, mode="a", header=not os.path.exists(credentials_file), index=False
     )
@@ -46,6 +47,12 @@ def register():
 def login() -> str:
     """Logs in a user by verifying email and password."""
     email = input("Enter your email: ")
+
+    # Check if the email is valid
+    if not is_valid_email(email):
+        print("Invalid email format. Please make sure the email contains '@' and a valid domain.")
+        return ""  # Return empty string if email is invalid
+    
     password = getpass("Enter your password: ")
 
     if not os.path.exists(credentials_file):
@@ -80,34 +87,22 @@ def save_to_csv(data, filename="user_interactions.csv"):
         filename, mode="a", header=not os.path.exists(filename), index=False
     )
 
-def read_from_csv(email=None):
-    """Reads saved data from the CSV file and filters by email."""
-    file_path = "user_interactions.csv"
-    if not os.path.exists(file_path):
-        return None
-
+def read_from_csv(email):
+    """Reads and filters data from the CSV file based on the provided email."""
     try:
-        # Load the CSV file
-        data = pd.read_csv(file_path)
-
-        # Debug: Print loaded data
-        print("Loaded Data from CSV:")
-        print(data)
-
-        # Filter data by email
-        if email:
-            email = email.strip().lower()  # Normalize the input email
-            data['Email'] = data['Email'].str.strip().str.lower()  # Normalize the CSV email column
-            filtered_data = data[data['Email'] == email]
-
-            # Debug: Print filtered data
-            print(f"Filtered Data for Email '{email}':")
-            print(filtered_data)
-
-            if filtered_data.empty:
-                return None
-            return filtered_data
-        return data
+        # Read the CSV file
+        data = pd.read_csv("data.csv")
+        
+        # Filter rows matching the user's email
+        filtered_data = data[data['Email'] == email]
+        
+        if filtered_data.empty:
+            return None  # Return None if no data matches the email
+        
+        return filtered_data
+    except FileNotFoundError:
+        print("The data file does not exist.")
+        return None
     except Exception as e:
-        print(f"Error reading from CSV: {e}")
+        print(f"An error occurred while reading the CSV: {e}")
         return None

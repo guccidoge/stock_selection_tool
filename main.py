@@ -1,7 +1,8 @@
 import os
-from functions import register, login, validate_ticker, get_historical_closing_prices, save_to_csv, read_from_csv
+from functions import register, login, validate_ticker, get_historical_closing_prices, save_to_csv, read_from_csv, is_valid_email
 
 def stock_retrieval(email):
+    """Stock ticker retrieval and display."""
     print("\nyo bro this is a stock tool")
 
     while True:
@@ -12,7 +13,7 @@ def stock_retrieval(email):
             clear_screen()  # Clear the screen after the invalid ticker input
             continue
 
-           # Get the time period for historical data
+        # Get the time period for historical data
         clear_screen()
         print("Select the time period:")
         print("1. 5 Days")
@@ -111,36 +112,45 @@ def main():
         print("2. Login")
         if is_logged_in:
             print("3. View Your Saved Data")
+            print("5. Go to Stock Ticker")
         print("4. Exit")
-        
-        choice = input("Enter your choice (1-4): ").strip()
+
+        choice = input("Enter your choice (1-5): ").strip()
 
         if choice == "1":
             clear_screen()
             register()
         elif choice == "2":
             clear_screen()
-            if login():
+            logged_in_email = login()
+            if logged_in_email:
                 clear_screen()
                 print("\nLogin successful!")
-                email = input("Enter your email to track your interaction: ")
+                while True:
+                    email = input("Enter your email to track your interaction: ").strip()
+                    if not is_valid_email(email):
+                        print("Invalid email format. Please make sure the email contains '@' and a valid domain.")
+                    else:
+                        break  # Exit the loop if email is valid
                 is_logged_in = True
             else:
                 print("\nLogin failed. Please try again.")
-        elif choice == "3":
+        elif choice == "3" and is_logged_in:
             saved_data = read_from_csv(email)  # Pass the logged-in email
             if saved_data is not None:
                 print("\nYour Saved Data:")
                 print(saved_data.to_string(index=False))
             else:
-                 print("No saved data found for your account.")
+                print("No saved data found for your account.")
+        elif choice == "5" and is_logged_in:
+            stock_retrieval(email)  # Go to stock ticker system
         elif choice == "4":
             clear_screen()
             print("beep-boop-beep! BYE-")
             break
         else:
             print("Invalid choice. Please enter a valid option.")
-        
+
         # Prompt to pause before returning to the menu
         input("\nPress Enter to return to the menu...")
 
