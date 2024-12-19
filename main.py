@@ -1,3 +1,4 @@
+import os
 from functions import register, login, validate_ticker, get_historical_closing_prices, save_to_csv, read_from_csv
 
 def stock_retrieval(email):
@@ -7,9 +8,12 @@ def stock_retrieval(email):
         ticker = input("Enter the Malaysian stock ticker (e.g., 1155.KL for Maybank): ").strip()
         if not validate_ticker(ticker):
             print("Invalid ticker. Please enter a valid Malaysian stock ticker.")
+            input("\nPress Enter to try again...")  # Pause before clearing screen
+            clear_screen()  # Clear the screen after the invalid ticker input
             continue
 
            # Get the time period for historical data
+        clear_screen()
         print("Select the time period:")
         print("1. 5 Days")
         print("2. 1 Month")
@@ -38,9 +42,12 @@ def stock_retrieval(email):
 
         if not period:
             print("Invalid choice. Please select a valid option.")
+            input("\nPress Enter to try again...")  # Pause before clearing screen
+            clear_screen()  # Clear the screen after invalid period choice
             continue
 
         # Retrieve and display historical data
+        clear_screen()
         print(f"\nRetrieving data for {ticker} for the last {period}...")
         closing_prices = get_historical_closing_prices(ticker, period)
 
@@ -85,39 +92,57 @@ def stock_retrieval(email):
         if cont != 'y':
             break
 
+    clear_screen()
+
+def clear_screen():
+    """Clears the console screen."""
+    os.system('cls' if os.name == 'nt' else 'clear')
+
 def main():
     """Main function that runs the program."""
-    print("yo bro choose your weapon:")
+    is_logged_in = False  # Track the login status of the user
+    email = None  # Store the logged-in user's email
+
     while True:
+        clear_screen()
+        print("yo bro choose your weapon:")
         print("\nChoose an option:")
         print("1. Register")
         print("2. Login")
-        print("3. View Saved Data")
+        if is_logged_in:
+            print("3. View Your Saved Data")
         print("4. Exit")
+        
         choice = input("Enter your choice (1-4): ").strip()
 
         if choice == "1":
+            clear_screen()
             register()
         elif choice == "2":
+            clear_screen()
             if login():
+                clear_screen()
                 print("\nLogin successful!")
                 email = input("Enter your email to track your interaction: ")
-                stock_retrieval(email)
+                is_logged_in = True
             else:
                 print("\nLogin failed. Please try again.")
         elif choice == "3":
-            # View saved data
-            saved_data = read_from_csv()
+            saved_data = read_from_csv(email)  # Pass the logged-in email
             if saved_data is not None:
-                print("\nSaved Data:")
-                print(saved_data)
+                print("\nYour Saved Data:")
+                print(saved_data.to_string(index=False))
             else:
-                print("No saved data found.")
+                 print("No saved data found for your account.")
         elif choice == "4":
+            clear_screen()
             print("beep-boop-beep! BYE-")
             break
         else:
             print("Invalid choice. Please enter a valid option.")
+        
+        # Prompt to pause before returning to the menu
+        input("\nPress Enter to return to the menu...")
 
 if __name__ == "__main__":
     main()
