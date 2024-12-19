@@ -1,6 +1,6 @@
 # Stock Selection Tool - User Guide
 
-Welcome to the **My Stock Selection Tool**! This tool allows you to retrieve historical stock data for Malaysian stocks and save it for later reference.
+Welcome to my **Stock Selection Tool**! This tool allows you to retrieve historical stock data for Malaysian stocks and save it for later reference.
 
 ## Features
 - **Register and Login**: Users can create an account and log in to track their interactions with the tool.
@@ -12,12 +12,12 @@ Welcome to the **My Stock Selection Tool**! This tool allows you to retrieve his
 
 ### 1. Install Python and Required Libraries
 
-Ensure Python is installed on your computer. You can download it from the official [Python website](https://www.python.org/downloads/).
+Make sure Python is installed on your computer. You can download it from the official [Python website](https://www.python.org/downloads/).
 
 Install the required Python libraries by running the following command in your terminal:
 
 ```bash
-pip install pandas
+pip install bcrypt pandas yfinance
 ```
 
 ### 2. Clone the Repository or Download the ZIP
@@ -46,17 +46,17 @@ Upon launching the program, you'll be presented with the following options:
 4. Exit
 5. Go to Stock Ticker Tool
 ```
-Register: For new accounts using your email.
-Login: For logging in with your email. 
+**Register**: For new accounts using your email.
+**Login**: For logging in with your email. 
 Your passwords are hashed using bcrypt so it will appear empty on the terminal. 
-All credentials are saved into credentials.csv
+All credentials are saved into ***credentials.csv***
 
 ### Step 2: Stock Ticker Tool
 Once you're logged in, you'll have the option to use the stock selection tool by choosing option 5 (Go to Stock Ticker Tool). Here’s what happens next:
 
-Enter a Stock Ticker: You’ll be prompted to enter a Malaysian stock ticker (e.g., 1155.KL for Maybank). The tool will validate the ticker, so make sure it's correct.
+**Enter a Stock Ticker**: You’ll be prompted to enter a Malaysian stock ticker (e.g., 1155.KL for Maybank). The tool will validate the ticker, so make sure it's correct.
 
-Choose the Time Period: After entering a valid ticker, you’ll need to select the time period for the historical data:
+**Choose the Time Period**: After entering a valid ticker, you’ll need to select the time period for the historical data:
 
 ```bash
 1. 5 Days
@@ -71,7 +71,7 @@ Choose the Time Period: After entering a valid ticker, you’ll need to select t
 Type the number corresponding to the desired time period.
 ```
 
-View Stock Data: The tool will fetch the historical closing prices for the selected stock ticker over the chosen time period. It will display key statistics such as:
+**View Stock Data**: The tool will fetch the historical closing prices for the selected stock ticker over the chosen time period. It will display key statistics such as:
 
 - Average Closing Price
 - Percentage Change (First to Last Price)
@@ -88,8 +88,8 @@ The saved data will include the following information:
 - Lowest Price
 - Percentage Change
 
-The saved data will be stored in a file named user_interactions.csv
+The saved data will be stored in a file named ***user_interactions.csv***
 
 ---
 
-***Happy coding! xx eilli***
+##Happy coding! xx eilli
